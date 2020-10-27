@@ -1,0 +1,33 @@
+{
+    "files.exclude": {
+        "**/*.dSYM": true,
+        "**/*.out": true,
+    },
+    "files.watcherExclude": {
+        "**/.out": true
+    },
+    "files.associations": {
+        "iostream": "cpp",
+        "utility": "cpp",
+        "queue": "cpp",
+        "ios": "cpp",
+        "string": "cpp",
+        "stack": "cpp",
+        "iosfwd": "cpp",
+        "__locale": "cpp",
+        "list": "cpp",
+        "deque": "cpp",
+        "functional": "cpp",
+        "map": "cpp",
+        "set": "cpp",
+        "unordered_map": "cpp",
+        "vector": "cpp",
+        "ostream": "cpp",
+        "algorithm": "cpp",
+        "memory": "cpp",
+        "iterator": "cpp",
+        "__bit_reference": "cpp",
+        "bitset": "cpp",
+        "chrono": "cpp"
+    },
+}
