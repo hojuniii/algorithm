@@ -28,6 +28,7 @@
         "iterator": "cpp",
         "__bit_reference": "cpp",
         "bitset": "cpp",
-        "chrono": "cpp"
+        "chrono": "cpp",
+        "__split_buffer": "cpp"
     },
 }
