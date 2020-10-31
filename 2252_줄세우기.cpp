@@ -27,21 +27,20 @@ int main()
         {
             q.push(i);
         }
-    }
 
-    while (!q.empty())
-    {
-        int val = q.front();
-        q.pop();
-
-        cout << val << " ";
-
-        for (int i = 0; i < edge[val].size(); i++)
+        while (!q.empty())
         {
-            int next = edge[val][i];
-            inDegree[next]--;
-            if (inDegree[next] == 0)
-                q.push(next);
+            int val = q.front();
+            q.pop();
+
+            cout << val << " ";
+
+            for (int i = 0; i < edge[val].size(); i++)
+            {
+                int next = edge[val][i];
+                inDegree[next]--;
+                if (inDegree[next] == 0)
+                    q.push(next);
+            }
         }
     }
-}

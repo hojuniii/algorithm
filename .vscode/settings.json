@@ -29,6 +29,8 @@
         "__bit_reference": "cpp",
         "bitset": "cpp",
         "chrono": "cpp",
-        "__split_buffer": "cpp"
+        "__split_buffer": "cpp",
+        "array": "cpp",
+        "string_view": "cpp"
     },
 }
