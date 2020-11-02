@@ -5,8 +5,6 @@
 using namespace std;
 
 char map[51][51];
-int fx, fy;
-int sx, sy;
 int maxDistance = -1;
 int n, m;
 bool check[51][51];
@@ -24,20 +22,15 @@ void bfs(int x, int y)
 
     while (!q.empty())
     {
-
         int cx = q.front().second.first;
         int cy = q.front().second.second;
         int dist = q.front().first;
-        // visit[cx][cy] = true;
+
         q.pop();
 
         if (maxDistance < dist)
         {
             maxDistance = dist;
-            fx = cx;
-            fy = cy;
-            sx = x;
-            sy = y;
         }
 
         for (int i = 0; i < 4; i++)
