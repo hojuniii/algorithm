@@ -26,7 +26,6 @@ int main()
     {
         before <<= 3;
         ll pc = (ll)(l >> i) * (w >> i) * (h >> i) - before;
-        cout << "pc:" << pc << endl;
         ll nc = min((ll)v[i].second, pc);
 
         before += nc;
