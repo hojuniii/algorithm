@@ -181,7 +181,6 @@ void dfs(int idx, int cnt)
             continue;
         cctvDirection[idx] = k;
         dfs(idx + 1, cnt + 1);
-        cctvDirection[idx] = 0;
     }
 }
 
