@@ -3,60 +3,62 @@
 #include <math.h>
 using namespace std;
 
-int minDif = 987654321;
-int arr[21][21];
-bool check[21];
+int score[21][21];
+bool team[21];
+int minDiff = 987654321;
 int n;
-
-void combi(int cnt, int cur)
+void comb(int cnt, int pos)
 {
     if (cnt == n / 2)
     {
-        int a = 0;
-        int b = 0;
+        int start = 0;
+        int link = 0;
 
         for (int i = 1; i <= n; i++)
         {
             for (int j = i + 1; j <= n; j++)
             {
-                if (check[i] && check[j])
+                if (i == j)
+                    continue;
+                if (team[i] && team[j])
                 {
-                    a += arr[i][j];
-                    a += arr[j][i];
+                    start += score[i][j];
+                    start += score[j][i];
                 }
-                else if (!check[i] && !check[j])
+                else if (!team[i] && !team[j])
                 {
-                    b += arr[i][j];
-                    b += arr[j][i];
+                    link += score[i][j];
+                    link += score[j][i];
                 }
             }
         }
-        int tmp = abs(a - b);
-        if (tmp < minDif)
-            minDif = tmp;
+        int diff = abs(start - link);
+        if (minDiff > diff)
+            minDiff = min(minDiff, diff);
         return;
     }
-
-    for (int i = cur; i < n; i++)
+    for (int i = pos; i < n; i++)
     {
-        check[i] = true;
-        combi(cnt + 1, i + 1);
-        check[i] = false;
+        team[i] = true;
+        comb(cnt + 1, i + 1);
+        team[i] = false;
     }
 }
-
 int main()
 {
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
     cin >> n;
+
     for (int i = 1; i <= n; i++)
     {
         for (int j = 1; j <= n; j++)
         {
-            cin >> arr[i][j];
+            cin >> score[i][j];
         }
     }
-    combi(0, 1);
-    cout << minDif << endl;
+    comb(0, 1);
+    cout << minDiff << endl;
 
     return 0;
 }
