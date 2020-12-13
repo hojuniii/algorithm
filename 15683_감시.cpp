@@ -1,23 +1,21 @@
 #include <algorithm>
 #include <iostream>
-#include <queue>
 #include <vector>
-#define MAX 9
-#define INF 987654321
+#define MAX 8
+#define INF 987654321;
 using namespace std;
 
-typedef pair<int, int> node;
-
-int n, m, ans, cctvCnt;
+int n, m, ans;
 int arr[MAX][MAX];
 int tmp[MAX][MAX];
-int cctvDirection[MAX];
-//  동 서 남 북
-int dx[] = {0, 0, 0, 1, -1};
-int dy[] = {0, 1, -1, 0, 0};
-vector<node> cctv;
 
-void copyMap()
+vector<pair<int, int>> cctv;
+int cctvDirection[MAX];
+// 동 서 남 북
+int dx[] = {0, 0, 1, -1};
+int dy[] = {1, -1, 0, 0};
+
+void copyArr()
 {
     for (int i = 0; i < n; i++)
     {
@@ -28,7 +26,7 @@ void copyMap()
     }
 }
 
-void detect(int x, int y, int d)
+void spread(int x, int y, int d)
 {
     int nx = x;
     int ny = y;
@@ -59,91 +57,96 @@ void setCCTV()
         case 1:
         {
             int dir = cctvDirection[i];
-            detect(x, y, dir);
+            spread(x, y, dir);
             break;
         }
         case 2:
         {
-            if (cctvDirection[i] == 1)
+            if (cctvDirection[i] == 0)
             {
-                detect(x, y, 1);
-                detect(x, y, 2);
+                spread(x, y, 0);
+                spread(x, y, 1);
             }
             else
             {
-                detect(x, y, 3);
-                detect(x, y, 4);
+                spread(x, y, 2);
+                spread(x, y, 3);
             }
             break;
         }
         case 3:
         {
-            if (cctvDirection[i] == 1)
+            if (cctvDirection[i] == 0)
             {
-                detect(x, y, 1);
-                detect(x, y, 3);
+                spread(x, y, 0);
+                spread(x, y, 3);
+            }
+            else if (cctvDirection[i] == 1)
+            {
+                spread(x, y, 0);
+                spread(x, y, 2);
             }
             else if (cctvDirection[i] == 2)
             {
-                detect(x, y, 1);
-                detect(x, y, 4);
+                spread(x, y, 1);
+                spread(x, y, 3);
             }
             else if (cctvDirection[i] == 3)
             {
-                detect(x, y, 2);
-                detect(x, y, 3);
-            }
-            else if (cctvDirection[i] == 4)
-            {
-                detect(x, y, 2);
-                detect(x, y, 4);
+                spread(x, y, 1);
+                spread(x, y, 2);
             }
             break;
         }
         case 4:
         {
-            if (cctvDirection[i] == 1)
+            if (cctvDirection[i] == 0)
             {
-                detect(x, y, 1);
-                detect(x, y, 3);
-                detect(x, y, 4);
+                //동 서 북
+                spread(x, y, 0);
+                spread(x, y, 1);
+                spread(x, y, 3);
+            }
+            else if (cctvDirection[i] == 1)
+            {
+                // 동 남 북
+                spread(x, y, 0);
+                spread(x, y, 2);
+                spread(x, y, 3);
             }
             else if (cctvDirection[i] == 2)
             {
-                detect(x, y, 1);
-                detect(x, y, 2);
-                detect(x, y, 4);
+                // 동 서 남
+                spread(x, y, 0);
+                spread(x, y, 1);
+                spread(x, y, 2);
             }
             else if (cctvDirection[i] == 3)
             {
-                detect(x, y, 1);
-                detect(x, y, 2);
-                detect(x, y, 3);
-            }
-            else if (cctvDirection[i] == 4)
-            {
-                detect(x, y, 2);
-                detect(x, y, 3);
-                detect(x, y, 4);
+                // 서 남 북
+                spread(x, y, 1);
+                spread(x, y, 2);
+                spread(x, y, 3);
             }
             break;
         }
         case 5:
         {
-            // 동 서 남 북
-            detect(x, y, 1);
-            detect(x, y, 2);
-            detect(x, y, 3);
-            detect(x, y, 4);
+            spread(x, y, 0);
+            spread(x, y, 1);
+            spread(x, y, 2);
+            spread(x, y, 3);
             break;
         }
         default:
+        {
             break;
+        }
         }
     }
 }
 
-int getBlind()
+int getMin()
 {
     int res = 0;
     for (int i = 0; i < n; i++)
@@ -157,31 +160,25 @@ int getBlind()
     return res;
 }
 
-// 모든 cctv에 대한 방향을 설정하는 재귀함수
 void dfs(int idx, int cnt)
 {
     if (cnt == cctv.size())
     {
-        copyMap();
-
+        copyArr();
         setCCTV();
-
-        ans = min(ans, getBlind());
+        ans = min(ans, getMin());
         return;
     }
 
     int x = cctv[idx].first;
     int y = cctv[idx].second;
 
-    for (int k = 1; k <= 4; k++)
+    for (int k = 0; k < 4; k++)
     {
-        //5번 cctv는 한방향만 탐색
-        if (arr[x][y] == 5 && k > 1)
+        if (arr[x][y] == 2 && k >= 2)
             continue;
-        //2번 cctv는 두방향만 탐색
-        if (arr[x][y] == 2 && k > 2)
+        if (arr[x][y] == 5 && k >= 1)
             continue;
-
         cctvDirection[idx] = k;
         dfs(idx + 1, cnt + 1);
         cctvDirection[idx] = 0;
@@ -190,23 +187,19 @@ void dfs(int idx, int cnt)
 
 int main()
 {
-    ios::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
-
     cin >> n >> m;
-
     for (int i = 0; i < n; i++)
     {
         for (int j = 0; j < m; j++)
         {
             cin >> arr[i][j];
-
-            // cctv 의 좌표를 벡터에 넣는다
             if (arr[i][j] >= 1 && arr[i][j] <= 5)
+            {
                 cctv.push_back({i, j});
+            }
         }
     }
+
     ans = INF;
     dfs(0, 0);
     cout << ans << '\n';
