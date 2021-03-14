@@ -32,6 +32,7 @@
         "__split_buffer": "cpp",
         "array": "cpp",
         "string_view": "cpp",
-        "__tree": "cpp"
+        "__tree": "cpp",
+        "__config": "cpp"
     },
 }
