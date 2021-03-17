@@ -1,5 +1,5 @@
-#include <iostream>
 #include <algorithm>
+#include <iostream>
 using namespace std;
 
 int map[401][401];
@@ -30,8 +30,7 @@ int main()
 
     cin >> v >> e;
 
-    for (int i = 1; i <= v
-    ; i++)
+    for (int i = 1; i <= v; i++)
     {
         for (int j = 1; j <= v; j++)
         {
