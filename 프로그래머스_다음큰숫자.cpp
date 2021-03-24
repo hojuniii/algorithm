@@ -20,7 +20,6 @@ int solution(int n)
     int cnt2 = 0;
     while (true)
     {
-
         nextNum++;
         int temp = nextNum;
         while (temp > 0)

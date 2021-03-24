@@ -23,7 +23,6 @@ void bfs(int x, int y)
         int y = q.front().second;
         visit[x][y] = true;
         q.pop();
-
         for (int i = 0; i < 4; i++)
         {
             int nx = x + dx[i];
