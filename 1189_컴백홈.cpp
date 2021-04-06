@@ -2,12 +2,13 @@
 using namespace std;
 
 int arr[5][5];
+int visit[5][5];
 int r, c, k;
 int ans = 0;
-int dx[4] = {0, 0, -1, 1};
-int dy[4] = {1, -1, 0, 0};
-bool visit[5][5];
-void search(int x, int y, int cnt)
+int dx[4] = {1, -1, 0, 0};
+int dy[4] = {0, 0, -1, 1};
+
+void dfs(int x, int y, int cnt)
 {
     if (cnt > k)
         return;
@@ -22,18 +23,20 @@ void search(int x, int y, int cnt)
     {
         int nx = x + dx[i];
         int ny = y + dy[i];
-        if (arr[nx][ny] == -1)
+        if (nx < 0 || ny < 0 || nx >= r || ny >= c)
             continue;
-        if (visit[nx][ny] || nx < 0 || ny < 0 || nx >= r || ny >= c)
+        if (visit[nx][ny] || arr[x][y] == -1)
             continue;
-
         visit[x][y] = true;
-        search(nx, ny, cnt + 1);
+        dfs(nx, ny, cnt + 1);
         visit[x][y] = false;
     }
 }
 int main()
 {
+    cin.tie(NULL);
+    ios::sync_with_stdio(false);
+
     cin >> r >> c >> k;
     for (int i = 0; i < r; i++)
     {
@@ -45,7 +48,8 @@ int main()
                 arr[i][j] = -1;
         }
     }
-    search(r - 1, 0, 1);
+
+    dfs(r - 1, 0, 1);
     cout << ans << endl;
 
     return 0;
