@@ -1,29 +1,79 @@
 #include <cstring>
 #include <iostream>
-#include <queue>
 using namespace std;
 
-int height[301][301];
-int decrease[301][301];
+int ice[301][301];
+int info[301][301];
 bool visit[301][301];
+
 int n, m;
-int dx[4] = {0, 0, 1, -1};
+int dx[4] = {0, 0, -1, 1};
 int dy[4] = {1, -1, 0, 0};
 
-void calc(int x, int y)
+bool isEmptyIce()
 {
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < m; j++)
+        {
+            if (ice[i][j] > 0)
+                return false;
+        }
+    }
+    return true;
+}
+
+void setInfo()
+{
+    memset(info, 0, sizeof(info));
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < m; j++)
+        {
+            if (ice[i][j] <= 0)
+                continue;
+            for (int k = 0; k < 4; k++)
+            {
+                int nx = i + dx[k];
+                int ny = j + dy[k];
+                if (ice[nx][ny] == 0)
+                    info[i][j]++;
+            }
+        }
+    }
+}
+
+void dfs(int x, int y)
+{
+    visit[x][y] = true;
     for (int i = 0; i < 4; i++)
     {
         int nx = x + dx[i];
         int ny = y + dy[i];
-
+        if (visit[nx][ny] || ice[nx][ny] == 0)
+            continue;
         if (nx < 0 || ny < 0 || nx >= n || ny >= m)
             continue;
-        if (height[nx][ny] == 0)
+        dfs(nx, ny);
+    }
+}
+int getArea()
+{
+    memset(visit, false, sizeof(visit));
+    int cnt = 0;
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < m; j++)
         {
-            decrease[x][y]++;
+            if (ice[i][j] <= 0)
+                continue;
+            if (visit[i][j])
+                continue;
+            dfs(i, j);
+            cnt++;
         }
     }
+    return cnt;
 }
 
 void melt()
@@ -32,106 +82,42 @@ void melt()
     {
         for (int j = 0; j < m; j++)
         {
-            if (height[i][j] == 0)
+            if (ice[i][j] <= 0)
                 continue;
-            height[i][j] -= decrease[i][j];
-            if (height[i][j] < 0)
-                height[i][j] = 0;
+            ice[i][j] -= info[i][j];
+            if (ice[i][j] < 0)
+                ice[i][j] = 0;
         }
     }
-}
-
-bool all_melted()
-{
-    for (int i = 0; i < n; i++)
-    {
-        for (int j = 0; j < m; j++)
-        {
-            if (height[i][j] > 0)
-                return false;
-        }
-    }
-    return true;
-}
-
-void dfs(int x, int y)
-{
-    visit[x][y] = true;
-
-    for (int i = 0; i < 4; i++)
-    {
-        int nx = x + dx[i];
-        int ny = y + dy[i];
-        if (nx < 0 || ny < 0 || nx >= n || ny >= m)
-            continue;
-        if (height[nx][ny] > 0 && !visit[nx][ny])
-        {
-            dfs(nx, ny);
-        }
-    }
-}
-
-// dfs 수행 횟수 -> 연결 개수
-int numberOfAdj()
-{
-    int res = 0;
-    for (int i = 0; i < n; i++)
-    {
-        for (int j = 0; j < m; j++)
-        {
-            if (!visit[i][j] && height[i][j] > 0)
-            {
-                dfs(i, j);
-                res++;
-            }
-        }
-    }
-    return res;
 }
 
 int main()
 {
-
     cin >> n >> m;
     for (int i = 0; i < n; i++)
     {
         for (int j = 0; j < m; j++)
         {
-            cin >> height[i][j];
+            cin >> ice[i][j];
         }
     }
-
-    int cnt = 0;
-    while (!all_melted())
+    int year = 0;
+    bool flag = false;
+    while (!isEmptyIce())
     {
-        // 덩어리 계산
-        if (numberOfAdj() >= 2)
+        // 주변 바닷물의 개수구함
+        setInfo();
+        melt();
+        year++;
+
+        int area = getArea();
+        if (area >= 2)
         {
-            cout << cnt << endl;
+            cout << year;
             exit(0);
         }
-
-        for (int i = 0; i < 300; i++)
-        {
-            memset(decrease[i], 0, sizeof(decrease[i]));
-            memset(visit[i], false, sizeof(visit[i]));
-        }
-
-        // 접해있는 바닷물 개수 계산
-        for (int i = 0; i < n; i++)
-        {
-            for (int j = 0; j < m; j++)
-            {
-                if (height[i][j] == 0)
-                    continue;
-                calc(i, j);
-            }
-        }
-        // 진행
-        melt();
-        cnt++;
     }
-    cout << 0 << endl;
+    cout << 0;
 
     return 0;
 }
