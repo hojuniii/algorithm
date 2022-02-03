@@ -46,5 +46,6 @@ int main()
             st.push(str[i]);
         }
     }
+    
     print_stack(st);
 }
