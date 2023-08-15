@@ -5,7 +5,7 @@
       "includePath": ["${workspaceFolder}/**"],
       "defines": ["${workspaceFolder}/.config"],
       "macFrameworkPath": [
-        "//Library/Developer/CommandLineTools/usr/bin"
+        "/Library/Developer/CommandLineTools/usr/bin"
       ],
       "compilerPath": "/usr/bin/gcc",
       "cStandard": "c11",
